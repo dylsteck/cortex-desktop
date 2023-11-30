@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "newcortex",
+  "name": "cortex",
   "description": "My application description",
   "version": "1.0.0",
   "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
@@ -11,8 +11,12 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "better-sqlite3": "^9.1.1",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "kysely": "^0.26.3",
+    "pg-pool": "^3.6.1",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "@types/node": "^18.18.12",
@@ -23,7 +27,6 @@
     "next": "^12.3.4",
     "nextron": "^8.12.0",
     "postcss": "^8.4.30",
-    "prisma": "^5.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.3.3",
