@@ -1,9 +1,9 @@
 {
   "private": true,
   "name": "cortex",
-  "description": "My application description",
+  "description": "Control all your apps in one place",
   "version": "1.0.0",
-  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "author": "@dylsteck",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
@@ -14,7 +14,9 @@
     "better-sqlite3": "^9.1.1",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
+    "fs": "^0.0.1-security",
     "kysely": "^0.26.3",
+    "path": "^0.12.7",
     "pg-pool": "^3.6.1",
     "sqlite3": "^5.1.6"
   },

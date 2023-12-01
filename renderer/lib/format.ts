@@ -1,4 +1,6 @@
 import { KyselyDB } from "../types/database";
+import fs from 'fs';
+import path from 'path';
 
 export function convertToCasts(inputObject: any) {
     return {
@@ -17,4 +19,10 @@ export function convertToCasts(inputObject: any) {
       mentions: JSON.stringify([]),
       mentions_positions: JSON.stringify([])
     };
-  }  
+}  
+
+export async function dbExists(): Promise<boolean> {
+  const response = await fetch('/api/dbExists');
+  const data = await response.json();
+  return data.exists;
+}
