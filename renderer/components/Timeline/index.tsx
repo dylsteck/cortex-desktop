@@ -7,7 +7,7 @@ const Timeline: React.FC = () => {
   useEffect(() => {
     async function fetchTimeline() {
       try {
-        const response = await fetch('/api/getTimeline?day=2023-11-30');
+        const response = await fetch('/api/getTimeline?day=2023-12-02');
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
         }

@@ -1,21 +1,19 @@
-import { type Generated, type GeneratedAlways } from "kysely";
-
 export interface KyselyDB {
   urls: {
-    id: bigint;
+    id: number;
     url: string;
     title: string;
     visit_count: number;
     last_visited: string;
-    created_at: Generated<Date>;
+    created_at: string;
   };
   
   casts: {
-    id: GeneratedAlways<number>;
-    created_at: Generated<Date>;
-    updated_at: Generated<Date>;
-    deleted_at: Date | null;
-    timestamp: Date;
+    id: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+    timestamp: number;
     fid: number;
     text: string;
     hash: string;
@@ -23,21 +21,16 @@ export interface KyselyDB {
     parent_fid: number | null;
     parent_url: string | null;
     pfp: string | null;
-    embeds: Generated<
-      {
-        url?: string | undefined;
-        castId?: object | undefined;
-      }[]
-    >;
-    mentions: Generated<number[]>;
-    mentions_positions: Generated<number[]>;
+    embeds: string;
+    mentions: string;
+    mentions_positions: string;
   };
 
   notes: {
-    id: GeneratedAlways<number>;
+    id: number;
     fileName: string | null;
     text: string;
-    createdAt: Generated<Date>;
-    updatedAt: Generated<Date>;
+    createdAt: string;
+    updatedAt: string;
   };
 }

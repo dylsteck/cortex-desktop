@@ -12,15 +12,15 @@ type OutputData = {
 
 // helper to get the most recent created_at time from db
 async function getLastCreatedTimeFromDatabase() {
-  const defaultTimestamp = '2022-10-31 00:00:00';
+  const defaultTimestamp = new Date('2022-10-31 00:00:00').getTime();
   try {
     const result = await sql<KyselyDB['urls']>`SELECT MAX(created_at) AS created_at FROM urls;`.execute(db);
     const lastCreatedAt = result.rows[0].created_at;
-    const lastCreatedAtFormatted = new Date(lastCreatedAt).toISOString().substring(0, 19).replace('T', ' ');
-    return lastCreatedAt ? lastCreatedAtFormatted : defaultTimestamp;
+    const lastCreatedAtTimestamp = new Date(lastCreatedAt).getTime();
+    return lastCreatedAt ? lastCreatedAtTimestamp : defaultTimestamp;
   } catch (error) {
     console.error("Error getting last created_at time from the db", error);
-    return '2022-10-31 00:00:00';
+    return new Date('2022-10-31 00:00:00').getTime();
   }
 }
 

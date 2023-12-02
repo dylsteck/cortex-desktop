@@ -4,10 +4,10 @@ import path from 'path';
 
 export function convertToCasts(inputObject: any) {
     return {
-      created_at: new Date(inputObject.created_at).toISOString(),
-      updated_at: new Date(inputObject.updated_at).toISOString(),
-      deleted_at: inputObject.deleted_at ? new Date(inputObject.deleted_at).toISOString() : null,
-      timestamp: new Date(inputObject.timestamp).toISOString(),
+      created_at: new Date(inputObject.created_at).getTime(),
+      updated_at: new Date(inputObject.updated_at).getTime(),
+      deleted_at: inputObject.deleted_at ? new Date(inputObject.deleted_at).getTime() : null,
+      timestamp: new Date(inputObject.timestamp).getTime(),
       fid: parseInt(inputObject.fid),
       text: inputObject.text,
       hash: inputObject.hash,

@@ -1,17 +1,20 @@
-// pages/api/getTimeline.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { db } from '../../lib/kysely';
 import type { KyselyDB } from '../../types/database';
 import { sql } from 'kysely';
-import { db } from '../../lib/kysely';
 
+interface UrlItem {
+  type: 'urls' | 'notes';
+  object: KyselyDB['urls'] | KyselyDB['notes'];
+}
 
 type OutputData = {
-  feed: Record<string, { type: string, object: any }[]>;
+  feed: UrlItem[];
 };
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<OutputData>
+  req: NextApiRequest, 
+  res: NextApiResponse<OutputData | { error: string }>
 ) {
   const { day } = req.query;
   if (typeof day !== 'string') {
@@ -19,44 +22,27 @@ export default async function handler(
     return;
   }
 
-  const startOfDay = `${day}T00:00:00.000`;
-  const endOfDay = `${day}T23:59:59.999`;
+  try {
+    const dayPattern = `${day}%`;
+    const notesQuery = sql<KyselyDB['urls']>`
+      SELECT * FROM notes
+      WHERE updatedAt LIKE ${dayPattern}
+    `;
+    const urlsQuery = sql<KyselyDB['urls']>`
+      SELECT * FROM urls
+      WHERE last_visited LIKE ${dayPattern}
+    `;
+    const notes = await notesQuery.execute(db);
+    const urls = await urlsQuery.execute(db);
 
-  const casts = await db
-    .selectFrom('casts')
-    .selectAll()
-    .where('timestamp', '>=', startOfDay)
-    .where('timestamp', '<=', endOfDay)
-    .execute();
+    const combinedArray: TimelineItem[] = [
+      ...urls.rows.map(item => ({ type: 'urls', object: item })),
+      ...notes.rows.map(item => ({ type: 'notes', object: item }))
+    ];
 
-  const urls = await db
-    .selectFrom('urls')
-    .selectAll()
-    .where('created_at', '>=', startOfDay)
-    .where('created_at', '<=', endOfDay)
-    .execute();
-
-  const notes = await db
-    .selectFrom('notes')
-    .selectAll()
-    .where('createdAt', '>=', startOfDay)
-    .where('createdAt', '<=', endOfDay)
-    .execute();
-
-  const combinedArray = [...casts, ...urls, ...notes];
-
-  const groupedByHour = combinedArray.reduce((acc, obj) => {
-    const timestamp = new Date(obj.created_at || obj.createdAt).getTime();
-    const hour = new Date(timestamp).getUTCHours().toString().padStart(2, '0'); // Convert to 24-hour format
-
-    if (!acc[hour]) {
-      acc[hour] = [];
-    }
-
-    const type = obj.hasOwnProperty('url') ? 'urls' : obj.hasOwnProperty('text') ? 'casts' : 'notes';
-    acc[hour].push({ type, object: obj });
-    return acc;
-  }, {});
-
-  return res.status(200).json({ feed: groupedByHour });
+    res.status(200).json({ feed: combinedArray });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve records' });
+  }
 }
