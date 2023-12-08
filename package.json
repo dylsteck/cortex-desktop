@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "cortex",
+  "name": "cortex-desktop",
   "description": "Control all your apps in one place",
   "version": "1.0.0",
   "author": "@dylsteck",
@@ -11,6 +11,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "@automerge/automerge": "^2.1.8",
     "better-sqlite3": "^9.1.1",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
